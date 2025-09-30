@@ -107,7 +107,7 @@ tailscale netcheck
 ```
 该命令将会检测你的网络配置，并验证是否能够成功连接到 DERP 服务器。它会提供延迟信息、STUN 连接状态以及连接到 Tailscale 网络的其他详细信息。确保输出中没有错误，并且 DERP 服务器的连接状况良好。
 ### 创建系统服务
-为了让DERP服务在系统启动时自动启动，我们将其配置为系统服务，创建并编辑文件_/etc/systemd/system/derp.service_
+为了让DERP服务在系统启动时自动启动，我们将其配置为系统服务，创建并编辑文件`/etc/systemd/system/derp.service`
 ```apacheconf
 [Unit]
 Description=Tailscale DERP
