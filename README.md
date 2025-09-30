@@ -1,4 +1,4 @@
-# 1.Tailscale-Derp
+# Tailscale-Derp
 如何自部署Tailscale中继Derp节点
 
 ### 安装tailscale
