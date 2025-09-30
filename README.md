@@ -26,18 +26,18 @@ source ~/.bashrc
 2. 安装完成后，DERP 服务器的可执行文件将位于 `~/go/bin/derper`，为了方便使用，可以将其移动到` /usr/bin/ `目录：`cp ~/go/bin/derper /usr/bin/`
 ### 生成 SSL 证书
 1. 由于 Tailscale 使用 SSL 加密，DERP 服务器需要一个证书。我们将生成自签名证书（有效期 10 年），并包含 VPS 的 IP 地址。（如果你有域名，可以不用自签名证书，稍后改为letsencrypt模式）
-例如你的VPS的IP地址为：154.222.24.65
+例如你的VPS的IP地址为：154.xxx.xxx.xxx
 ```bash
 mkdir /home/user/derp
 cd /home/user/derp
-DERP_IP="154.222.24.65"  # 替换为你的 VPS 的 IP 地址
+DERP_IP="154.xxx.xxx.xxx"  # 替换为你的 VPS 的 IP 地址
 openssl req -x509 -newkey rsa:4096 -sha256 -days 3650 -nodes -keyout ${DERP_IP}.key -out ${DERP_IP}.crt -subj "/CN=${DERP_IP}" -addext "subjectAltName=IP:${DERP_IP}"
 ```
 此命令将在当前目录（_/home/user/derp_）下生成两个文件：`${DERP_IP}.key` 和 `${DERP_IP}.crt`。这将在后续步骤中使用。
 ### 启动DERP服务
-例如HTTPS服务的**TCP**端口为`10001`，STUN服务的**UDP**端口为`10002`，IP为`154.222.24.65`，自签名证书目录为`/home/user/derp`，防火墙打开相应端口后，执行：
+例如HTTPS服务的**TCP**端口为`10001`，STUN服务的**UDP**端口为`10002`，IP为`154.xxx.xxx.xxx`，自签名证书目录为`/home/user/derp`，防火墙打开相应端口后，执行：
 ```bash
-derper -a :10001 -http-port -1 -stun -stun-port 10002 -hostname 154.222.24.65 -certmode manual -certdir /home/user/derp -verify-client
+derper -a :10001 -http-port -1 -stun -stun-port 10002 -hostname 154.xxx.xxx.xxx -certmode manual -certdir /home/user/derp -verify-client
 ```
 您可以通过添加额外的命令参数来自定义 DERP 服务器的配置。以下是常用的参数说明及其用途：
 -a string  
@@ -89,9 +89,9 @@ derper -a :10001 -http-port -1 -stun -stun-port 10002 -hostname 154.222.24.65 -c
                 {
                     "Name": "自定义节点名称", // 节点名称，表示这个DERP服务器的名称。
                     "RegionID": 900, // 该节点所属的区域ID，应该与父级区域ID一致。
-                    "HostName": "154.222.24.65", // 指定该DERP服务器使用的主机名。通常是自签名的域名，用于TLS证书验证。如果选择了自签名证书，推荐使用域名；如果使用的是普通IP地址，也可以填IP地址。
+                    "HostName": "154.xxx.xxx.xxx", // 指定该DERP服务器使用的主机名。通常是自签名的域名，用于TLS证书验证。如果选择了自签名证书，推荐使用域名；如果使用的是普通IP地址，也可以填IP地址。
                     "DERPPort": 10001, // 该DERP服务器使用的HTTPS端口。需要与实际运行的DERP服务的端口一致，默认值为443。
-                    "IPv4": "154.222.24.65", // 指定主机名对应的IPv4地址。如果使用域名，必须提供IPv4地址，否则DNS解析可能无法正常工作。
+                    "IPv4": "154.xxx.xxx.xxx", // 指定主机名对应的IPv4地址。如果使用域名，必须提供IPv4地址，否则DNS解析可能无法正常工作。
                 // "IPv6": "x.x.x.x", // 可选，指定主机名对应的IPv6地址。如果有IPv6支持，可以填写此项。
                     "InsecureForTests": true, // 当HostName没有使用域名，而是使用IP时设置为true，这会降低连接的安全性。
                     "STUNPort": 10002 // 用于STUN协议的端口，默认值是3478。STUN用于NAT穿透，如果需要修改端口，确保与DERP服务的配置一致。
@@ -117,7 +117,7 @@ Wants=network.target
 [Service]
 User=root
 Restart=always
-ExecStart=/root/go/bin/derper -a :10001 -http-port -1 -stun -stun-port 10002 -hostname 100.100.199.199 -certmode manual -certdir /home/user/derp -verify-clients
+ExecStart=/root/go/bin/derper -a :10001 -http-port -1 -stun -stun-port 10002 -hostname 100.xxx.xxx.xxx -certmode manual -certdir /home/user/derp -verify-clients
 RestartSec=5
 StartLimitInterval=0
 
